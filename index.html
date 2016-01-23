@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="refresh" content="600">
+    <style type="text/css">
+        html,body{height:100%;margin:0px;padding:0px;font-family:"微软雅黑";font-size:14px;}
+        #allmap
+        {
+        	float:left; 
+            padding:10px; 
+            width:1440px; 
+            height:700px;
+            border: 20px solid #000000;
+            -moz-border-radius: 15px; 
+            -webkit-border-radius: 15px; 
+            border-radius:15px;           
+        }
+        .optionpanel{margin: 10px;}
+        #r-result{width:100%;}
+        #r-result p{margin:5px 0 0 10px;}
+        #h1header2{ style=padding: 2px;margin:10 auto;background-color:gray;padding: 2px; font-size: 40px;}
+        .download{
+            position:fixed;
+            right:0;
+            top:0;
+        }
+        button {
+            background: #e3e3e3;
+            border: 1px solid #bbb;
+            border-radius: 3px;
+            -webkit-box-shadow: inset 0 0 1px 1px #f6f6f6;
+            box-shadow: inset 0 0 1px 1px #f6f6f6;
+            color: #333;
+            font: bold 12px/1 "helvetica neue", helvetica, arial, sans-serif;
+            padding: 8px 0 9px;
+            text-align: center;
+            text-shadow: 0 1px 0 #fff;
+            width: 150px;
+        }
+        button:hover {
+            background: #d9d9d9;
+            -webkit-box-shadow: inset 0 0 1px 1px #eaeaea;
+            box-shadow: inset 0 0 1px 1px #eaeaea;
+            color: #222;
+            cursor: pointer;
+        }
+        button:active {
+            background: #d0d0d0;
+            -webkit-box-shadow: inset 0 0 1px 1px #e3e3e3;
+            box-shadow: inset 0 0 1px 1px #e3e3e3;
+            color: #000;
+        }
+
+        nav{
+          display: block; 
+          overflow: hidden;
+          margin:0 auto;
+          width:auto;
+          border:1px solid #ccc;
+          }
+        nav ul{
+          width:200%;
+          margin: 0px 0 0px 0;
+          padding: .7em; 
+          float: left; 
+          list-style: none; 
+          background: #444;
+          background: rgba(0,0,0,.2);
+          -moz-border-radius: .5em; 
+          -webkit-border-radius: .5em;
+          border-radius: .5em; 
+          -moz-box-shadow: 0 1px 0 rgba(255,255,255,.2), 0 2px 1px rgba(0,0,0,.8) inset;
+          -webkit-box-shadow: 0 1px 0 rgba(255,255,255,.2), 0 2px 1px rgba(0,0,0,.8) inset; 
+          box-shadow: 0 1px 0 rgba(255,255,255,.2), 0 2px 1px rgba(0,0,0,.8) inset;
+          }
+        nav li{
+    
+          }
+        nav a{
+          float:left; 
+          padding: .8em 1.5em; 
+          text-decoration: none; 
+          color: #555; 
+          text-shadow: 0 1px 0 rgba(255,255,255,.5); 
+          font: bold 1.1em/1 'trebuchet MS', Arial, Helvetica; 
+          letter-spacing: 1px; 
+          text-transform: uppercase; 
+          border-height:1px;
+          border-width: 1px; 
+          border-style: solid; 
+          border-color: #fff #ccc #999 #eee; 
+          background: #c1c1c1; 
+          background: -moz-linear-gradient(#f5f5f5, #c1c1c1); 
+          background: -webkit-gradient(linear, left top, left bottom, from(#f5f5f5), to(#c1c1c1));
+          background: -webkit-linear-gradient(#f5f5f5, #c1c1c1);
+          background: -o-linear-gradient(#f5f5f5, #c1c1c1); 
+          background: -ms-linear-gradient(#f5f5f5, #c1c1c1); 
+          background: linear-gradient(#f5f5f5, #c1c1c1);
+          }
+        nav a:hover, nav a:focus{
+            outline: 0;
+            color: #fff; 
+            text-shadow: 0 1px 0 rgba(0,0,0,.2); 
+            background: #fac754; 
+            background: -moz-linear-gradient(#fac754, #f8ac00);
+            background: -webkit-gradient(linear, left top, left bottom, from(#fac754), to(#f8ac00)); 
+            background: -webkit-linear-gradient(#fac754, #f8ac00); 
+            background: -o-linear-gradient(#fac754, #f8ac00); 
+            background: -ms-linear-gradient(#fac754, #f8ac00);
+            background: linear-gradient(#fac754, #f8ac00);
+            }
+        nav a:active{
+            -moz-box-shadow: 0 0 2px 2px rgba(0,0,0,.3) inset; 
+            -webkit-box-shadow: 0 0 2px 2px rgba(0,0,0,.3) inset;
+            box-shadow: 0 0 2px 2px rgba(0,0,0,.3) inset;
+            }
+        nav li:first-child a{
+            border-left: 0;
+            -moz-border-radius: 4px 0 0 4px;
+            -webkit-border-radius: 4px 0 0 4px;
+            border-radius: 4px 0 0 4px;
+            }
+        nav li:last-child a{
+            border-right: 0;
+            -moz-border-radius: 0 4px 4px 0;
+            -webkit-border-radius: 0 4px 4px 0; 
+            border-radius: 0 4px 4px 0;
+            }
+
+    </style>
+    <script src="http://api.map.baidu.com/api?v=2.0&ak=XvK4SOEeCMSFTvPce8BhdfZQ"></script>
+    <script src="/jquery.js"></script>    
+    <script>
+        $(function(){
+            $("button").click(function(){
+                window.open('/getexcel.php');//下载data.xlsx
+            });
+        });
+    </script> 
+	<title>PM2.5 Map</title>
+</head>
+<body>
+    <div class="download">
+        <button>Excel Download</button>
+    </div>
+    <div id="h1header2"><b>Air Quality Display And Analyse: </b>  Air Index In China </div>     
+    <nav>
+        <ul>
+            <li><a href="#" onclick="MapInit('api');return false;" >ApiIndexMap</a></li>
+            <li><a href="#" onclick="MapInit('pm25');return false;" >PM2.5IndexMap</a></li>
+            <li><a href="#" onclick="MapInit('pm10');return false;" >PM10IndexMap</a></li>
+            <li><a href="#" onclick="IntroInit();return false;" >Introduction</a></li>
+            <li><a href="#" onclick="AnaInit();return false;" >Analysis</a></li>
+            <li><a href="#" onclick="DataInit();return false;" >DataSource</a></li>
+            <li><a href="#" onclick="DowInit();return false;" >Download</a></li>
+            <li><a href="#" onclick="CopInit();return false;" >CopyRight</a></li>
+            <li><a href="#" onclick="ConInit();return false;" >Contact</a></li>
+        </ul>
+    </nav>
+    <div id="allmap">
+		<div id="r-result">
+	        <div class="optionpanel">
+	            <label>Theme:</label>
+	            <select id="stylelist" onchange="changeMapStyle(this.value)"></select>
+	        </div>
+	    </div>
+    </div>
+
+</body>
+<script type="text/javascript" src="http://developer.baidu.com/map/custom/stylelist.js"></script>
+<script charset="utf-8">
+    function MapInit(standard) {
+        $.getJSON('/data.php').fail(function(){console.log('e');}).done(function(data)
+        {
+            //console.log(data);
+            $('#allmap').replaceWith($('<div id="allmap"><div id="r-result"><div class="optionpanel"><label>Theme:</label><select id="stylelist" onchange="changeMapStyle(this.value)"></select></div></div></div>'));
+            
+            var sel = $('#stylelist')[0];
+            for(var key in mapstyles){
+                var style = mapstyles[key];
+                var item = new  Option(style.title,key);
+                sel.options.add(item);
+            }
+            var map = new BMap.Map("allmap"); window.map = map;
+            var point = new BMap.Point(116.404, 39.915);
+
+            map.addControl(new BMap.OverviewMapControl());             
+            map.enableScrollWheelZoom();                          
+            map.addControl(new BMap.MapTypeControl());          
+            map.disable3DBuilding();
+            map.centerAndZoom(point, 5); 
+
+            changeMapStyle('midnight')
+            sel.value = 'midnight';
+            function changeMapStyle(style){
+                map.setMapStyle({style:style});
+                $('#desc').html(mapstyles[style].desc);
+            }
+            function createInfoWindow(markerArr){
+                var json = markerArr;
+                var iw = new BMap.InfoWindow("<b class='iw_poi_title' title='" + json.title + "'>" + json.title + "</b><div class='iw_poi_content'>"+json.content+"</div>");
+                return iw;
+            }
+
+            function createIcon(json){
+                var icon = new BMap.Icon("http://app.baidu.com/map/images/us_mk_icon.png", new BMap.Size(json.w,json.h),{imageOffset: new BMap.Size(-json.l,-json.t),infoWindowOffset:new BMap.Size(json.lb+5,1),offset:new BMap.Size(json.x,json.h)})
+                return icon;
+            }
+            
+            function addMarker(markerArr){
+                var json = markerArr;
+                var p0 = json.point.split("|")[0];
+                var p1 = json.point.split("|")[1];
+                var point = new BMap.Point(p0,p1);
+                var iconImg = createIcon(json.icon);
+                var marker = new BMap.Marker(point,{icon:iconImg});
+                var label = new BMap.Label(json.title,{"offset":new BMap.Size(json.icon.lb-json.icon.x+10,-20)});
+                marker.setLabel(label);
+                map.addOverlay(marker);
+                label.setStyle({
+                            borderColor:"#808080",
+                            color:"#333",
+                            cursor:"pointer"
+                });
+                
+                var iw = createInfoWindow(markerArr);
+                (function(){
+                    var _iw = createInfoWindow(markerArr);
+                    var _marker = marker;
+                    _marker.addEventListener("click",function(){
+                        this.openInfoWindow(_iw);
+                    });
+                    _iw.addEventListener("open",function(){
+                        _marker.getLabel().hide();
+                    })
+                    _iw.addEventListener("close",function(){
+                        _marker.getLabel().show();
+                    })
+                    label.addEventListener("click",function(){
+                        _marker.openInfoWindow(_iw);
+                    })
+                    if(!!json.isOpen){
+                        label.hide();
+                        _marker.openInfoWindow(_iw);
+                    }
+                })();
+            }
+            
+            //console.log(data);
+            var myGeo = new BMap.Geocoder();
+            for (var i in data)
+            {
+            //if(i==1)
+            //alert(data[i].city);
+                (function(){
+                    var city = data[i].city;
+                    var apiindex = data[i].api;
+                    var pm25index=data[i].pm25;
+                    var pm10index=data[i].pm10;                    
+                    var apinumber;
+                    var apisign;//used for flags
+                    var pm25number;
+                    var pm25sign;
+                    var pm10number;
+                    var pm10sign;
+                    myGeo.getPoint(city, function(points)
+                    {
+                        if (points)
+                        {
+                        if (standard=="api")
+                        {
+                                if (apiindex!="_")
+                                {
+                                    if (apiindex<=50)
+                                    {
+                                      apinumber=0;
+                                      apisign="excellent";                           
+                                    }
+                                    else if (apiindex<=100)
+                                    {
+                                      apinumber=69;
+                                      apisign="good";
+                                    }
+                                    else 
+                                    {
+                                      apinumber=46;
+                                      apisign="bad";
+                                    }
+                                    addMarker({title:apiindex.toString(),content:apisign,point:points.lng.toString()+'|'+points.lat.toString(),isOpen:0,icon:{w:21,h:21,l:apinumber,t:46,x:1,lb:10}}); 
+                                }
+                        }                        
+                        else if (standard=="pm25")
+                        {                   
+                            if (pm25index!="_")
+                            {                        
+                                if (pm25index<=50)
+                                {
+                                  pm25number=0;
+                                  pm25sign="excellent";                           
+                                }
+                                else if (pm25index<=100)
+                                {
+                                  pm25number=69;
+                                  pm25sign="good";
+                                }
+                                else 
+                                {
+                                  pm25number=46;
+                                  pm25sign="bad";
+                                }
+                                addMarker({title:pm25index.toString(),content:pm25sign,point:points.lng.toString()+'|'+points.lat.toString(),isOpen:0,icon:{w:21,h:21,l:pm25number,t:0,x:6,lb:5}});                                                     
+                            }
+                        }
+                            
+                         else if (standard=="pm10")   
+                         {
+                            if (pm10index!="_")
+                            {
+                                if (pm10index<=50)
+                                {
+                                  pm10number=0;
+                                  pm10sign="excellent";                           
+                                }
+                                else if (pm10index<=100)
+                                {
+                                  pm10number=69;
+                                  pm10sign="good";
+                                }
+                                else 
+                                {
+                                  pm10number=46;
+                                  pm10sign="bad";
+                                }
+                                 addMarker({title:pm10index.toString(),content:pm10sign,point:points.lng.toString()+'|'+points.lat.toString(),isOpen:0,icon:{w:23,h:25,l:pm10number,t:21,x:9,lb:12}});                             
+                            }
+                        }
+                            else 
+                            {
+                                if (pm25index!="_")
+                                {                        
+                                    if (pm25index<=50)
+                                    {
+                                      pm25number=0;
+                                      pm25sign="excellent";                           
+                                    }
+                                    else if (pm25index<=100)
+                                    {
+                                      pm25number=69;
+                                      pm25sign="good";
+                                    }
+                                    else 
+                                    {
+                                      pm25number=46;
+                                      pm25sign="bad";
+                                    }
+                                    addMarker({title:pm25index.toString(),content:pm25sign,point:points.lng.toString()+'|'+points.lat.toString(),isOpen:0,icon:{w:21,h:21,l:pm25number,t:0,x:6,lb:5}});                                                     
+                                }                            
+                            }
+                        } 
+                        else 
+                        {
+                            console.log(name);//少量无法解析的数据放入日志中
+                        }
+                    });
+                }());
+            }
+           //window.open('/getexcel.php');//下载data.xlsx（每10min一次）
+        });
+    }
+    function IntroInit()
+    {
+        $('#allmap').replaceWith($('<div id="allmap"><ul><li style="color: #002B38;font-size: 40px;font-weight: bold;">This map is about the PM2.5 index in China</li><li style="color: #002B38;font-size: 40px;font-weight: bold;">The information of this map can be updated at any time:Refresh the website or click MAP button</li><li style="color: #002B38;font-size: 40px;font-weight: bold;">The data source is based on other air websites:click DATASOURCE button</li><li style="color: #002B38;font-size: 40px;font-weight: bold;">You can download the data at present:click DOWNLOAD button</li><li style="color: #002B38;font-size: 40px;font-weight: bold;">If you need analyse results, you can contact me</li><li style="color: #002B38;font-size: 40px;font-weight: bold;">Before you browse this website ,please read Readme.txt </li></ul></div>'));            
+        //$('#allmap p').text('');
+    }
+    function DataInit()
+    {
+        $('#allmap').replaceWith($('<div id="allmap"><ul><li><a href="http://www.tianqi.com/air/" style="font-weight: bold;color: #002B38;font-size: 40px;font-family:"微软雅黑";"  target="_blank">www.tianqi.com/air/</a></li><li><a href="http://www.pm25.in/" style="font-weight: bold;color: #002B38;font-size: 40px;font-family:"微软雅黑";"  target="_blank">www.pm25.in</a></li><li><a href="http://datacenter.mep.gov.cn/" style="font-weight: bold;color: #002B38;font-size: 40px;font-family:"微软雅黑";"  target="_blank">datacenter.mep.gov.cn</a></li></ul></div>'));
+    }
+    $(function() {
+        MapInit("api");
+    });
+</script>
+</html>
+
+
+
+
+
+

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="gb2312"> 
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+        html,body{height:100%;margin:0px;padding:0px;font-family:"微软雅黑";font-size:14px;}
+        #allmap
+        {
+        	height:800px;
+        	width:1400px;
+        	/*
+        	margin-top: 80px;
+        	*/
+
+        	float:left;
+        	
+        }
+        .optionpanel{margin: 10px;}
+        #r-result{width:100%;}
+        #r-result p{margin:5px 0 0 10px;}
+        #h1header2{ style=padding: 2px; font-size: 29px;margin:10 auto}
+    </style>
+    <script src="http://api.map.baidu.com/api?v=2.0&ak=XvK4SOEeCMSFTvPce8BhdfZQ"></script>
+    <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+    <script src="/angular/angular.js"></script>
+	<title>PM2.5 Map</title>
+</head>
+<body>
+    <div id="h1header2"><b>Air Quality Display And Analyse: </b>  PM2.5 Index In China </div>
+    <div id="allmap">
+		<div id="r-result">
+	        <div class="optionpanel">
+	            <label>Theme:</label>
+	            <select id="stylelist" onchange="changeMapStyle(this.value)"></select>
+	        </div>
+	    </div>   
+    </div>
+    <div id="result">
+    </div>
+</body>
+</html>
+<script type="text/javascript" src="http://developer.baidu.com/map/custom/stylelist.js"></script>
+<script>
+    	$(function() {
+    		$.getJSON('/data.php').done(function(data) 
+            {
+               
+                console.log(data);
+                
+                var sel = document.getElementById('stylelist');
+                for(var key in mapstyles){
+                    var style = mapstyles[key];
+                    var item = new  Option(style.title,key);
+                    sel.options.add(item);
+                }
+                var map = new BMap.Map("allmap"); window.map = map;
+                var point = new BMap.Point(116.404, 39.915);
+
+                map.addControl(new BMap.OverviewMapControl());             
+                map.enableScrollWheelZoom();                          
+                map.addControl(new BMap.MapTypeControl());          
+                map.disable3DBuilding();
+                map.centerAndZoom(point, 5); 
+
+                changeMapStyle('midnight')
+                sel.value = 'midnight';
+                
+                var markerArr = 
+                [
+                     {title:"12",content:"you",point:"130.233333|30.430042",isOpen:0,icon:{w:21,h:21,l:0,t:46,x:1,lb:10}}
+                ];
+                function changeMapStyle(style){
+                    map.setMapStyle({style:style});
+                    $('#desc').html(mapstyles[style].desc);
+                }
+                /*
+                     var j=34;
+                     var px=129;
+                     var py=27;
+                     var number=0;
+                     sign="you";
+                     for (var i=0;i<30;i++)
+                     {
+                        px=Math.ceil(Math.random()*20)+100;py=Math.ceil(Math.random()*10)+30;j=Math.floor(Math.random()*100)+50;
+                        if (j<=50)
+                            {
+                                sign="you";
+                                number=0;
+                            }
+                        else if (j<=100)
+                            {
+                                sign="liang"
+                                number=69;
+                            }
+                        else 
+                            {
+                               sign="zhong"
+                               number=46;
+                            }
+                       markerArr.push({title:j.toString(),content:sign,point:px.toString()+'|'+py.toString(),isOpen:0,icon:{w:21,h:21,l:number,t:46,x:1,lb:10}});       
+                     }
+                   //db
+                   for (var i=0;i<10;i++)
+                     {
+                        px=Math.ceil(Math.random()*7)+120;py=Math.ceil(Math.random()*3)+42;j=Math.floor(Math.random()*60)+70;
+                        if (j<=50)
+                            {
+                                sign="you";
+                                number=0;
+                            }
+                        else if (j<=100)
+                            {
+                                sign="liang"
+                                number=69;
+                            }
+                        else 
+                            {
+                               sign="zhong"
+                               number=46;
+                            }
+                       markerArr.push({title:j.toString(),content:sign,point:px.toString()+'|'+py.toString(),isOpen:0,icon:{w:21,h:21,l:number,t:46,x:1,lb:10}});       
+                     }
+                     
+                     
+                     //hb
+                     //  43 109      43  117
+                     //  34  109             34    117
+                   for (var i=0;i<30;i++)
+                     {
+                        px=Math.ceil(Math.random()*8)+109;py=Math.ceil(Math.random()*9)+34;j=Math.floor(Math.random()*80)+65;
+                        if (j<=50)
+                            {
+                                sign="you";
+                                number=0;
+                            }
+                        else if (j<=100)
+                            {
+                                sign="liang"
+                                number=69;
+                            }
+                        else 
+                            {
+                               sign="zhong"
+                               number=46;
+                            }
+                       markerArr.push({title:j.toString(),content:sign,point:px.toString()+'|'+py.toString(),isOpen:0,icon:{w:21,h:21,l:number,t:46,x:1,lb:10}});       
+                     }
+                     
+                     //xb
+                     for (var i=0;i<20;i++)
+                     {
+                        px=Math.ceil(Math.random()*8)+104;py=Math.ceil(Math.random()*8)+32;j=Math.floor(Math.random()*65)+55;
+                        if (j<=50)
+                            {
+                                sign="you";
+                                number=0;
+                            }
+                        else if (j<=100)
+                            {
+                                sign="liang"
+                                number=69;
+                            }
+                        else 
+                            {
+                               sign="zhong"
+                               number=46;
+                            }
+                       markerArr.push({title:j.toString(),content:sign,point:px.toString()+'|'+py.toString(),isOpen:0,icon:{w:21,h:21,l:number,t:46,x:1,lb:10}});       
+                     }
+                     //zn
+                     
+                     for (var i=0;i<40;i++)
+                     {
+                        px=Math.ceil(Math.random()*7)+112;py=Math.ceil(Math.random()*10)+23;j=Math.floor(Math.random()*120)+70;
+                        if (j<=50)
+                            {
+                                sign="you";
+                                number=0;
+                            }
+                        else if (j<=100)
+                            {
+                                sign="liang"
+                                number=69;
+                            }
+                        else 
+                            {
+                               sign="zhong"
+                               number=46;
+                            }
+                       markerArr.push({title:j.toString(),content:sign,point:px.toString()+'|'+py.toString(),isOpen:0,icon:{w:21,h:21,l:number,t:46,x:1,lb:10}});       
+                     }
+                     
+                     //xn
+                     for (var i=0;i<30;i++)
+                     {
+                        px=Math.ceil(Math.random()*12)+99;py=Math.ceil(Math.random()*4)+24;j=Math.floor(Math.random()*20)+50;
+                        if (j<=50)
+                            {
+                                sign="you";
+                                number=0;
+                            }
+                        else if (j<=100)
+                            {
+                                sign="liang"
+                                number=69;
+                            }
+                        else 
+                            {
+                               sign="zhong"
+                               number=46;
+                            }
+                       markerArr.push({title:j.toString(),content:sign,point:px.toString()+'|'+py.toString(),isOpen:0,icon:{w:21,h:21,l:number,t:46,x:1,lb:10}});       
+                     }
+                     //
+                     //44.33 82.41       44.80  92.70
+                     //30.77 82.20       30.77  92.70
+                      for (var i=0;i<10;i++)
+                     {
+                        px=Math.ceil(Math.random()*10)+82;py=Math.ceil(Math.random()*14)+30;j=Math.floor(Math.random()*40)+50;
+                        if (j<=50)
+                            {
+                                sign="you";
+                                number=0;
+                            }
+                        else if (j<=100)
+                            {
+                                sign="liang"
+                                number=69;
+                            }
+                        else 
+                            {
+                               sign="zhong"
+                               number=46;
+                            }
+                       markerArr.push({title:j.toString(),content:sign,point:px.toString()+'|'+py.toString(),isOpen:0,icon:{w:21,h:21,l:number,t:46,x:1,lb:10}});       
+                     }
+
+
+                     markerArr.push( {title:"46",content:"you",point:"101|22",isOpen:0,icon:{w:21,h:21,l:0,t:46,x:1,lb:10}})
+                     markerArr.push( {title:"37",content:"you",point:"107|21",isOpen:0,icon:{w:21,h:21,l:0,t:46,x:1,lb:10}})
+                     markerArr.push( {title:"29",content:"you",point:"110|20",isOpen:0,icon:{w:21,h:21,l:0,t:46,x:1,lb:10}})
+                     markerArr.push( {title:"41",content:"you",point:"110|19",isOpen:0,icon:{w:21,h:21,l:0,t:46,x:1,lb:10}})
+                     markerArr.push( {title:"38",content:"you",point:"107.43|22.98",isOpen:0,icon:{w:21,h:21,l:0,t:46,x:1,lb:10}})
+                     markerArr.push( {title:"42",content:"you",point:"123.27|40.59",isOpen:0,icon:{w:21,h:21,l:0,t:46,x:1,lb:10}})
+                     markerArr.push( {title:"25",content:"you",point:"128.63|42.74",isOpen:0,icon:{w:21,h:21,l:0,t:46,x:1,lb:10}})
+                     markerArr.push( {title:"50",content:"you",point:"130.86|45.53",isOpen:0,icon:{w:21,h:21,l:0,t:46,x:1,lb:10}})
+                     markerArr.push( {title:"49",content:"you",point:"124.44|50.92",isOpen:0,icon:{w:21,h:21,l:0,t:46,x:1,lb:10}})
+                     markerArr.push( {title:"47",content:"you",point:"123.44|49.92",isOpen:0,icon:{w:21,h:21,l:0,t:46,x:1,lb:10}})
+                     markerArr.push( {title:"65",content:"cha",point:"100.43|31.29",isOpen:0,icon:{w:21,h:21,l:69,t:46,x:1,lb:10}})
+                     markerArr.push( {title:"89",content:"cha",point:"96.07|34.04",isOpen:0,icon:{w:21,h:21,l:69,t:46,x:1,lb:10}})
+                     
+                function addMarker(){
+                    for(var i=0;i<markerArr.length;i++){
+                        var json = markerArr[i];
+                        var p0 = json.point.split("|")[0];
+                        var p1 = json.point.split("|")[1];
+                        var point = new BMap.Point(p0,p1);
+                        var iconImg = createIcon(json.icon);
+                        var marker = new BMap.Marker(point,{icon:iconImg});
+                        var iw = createInfoWindow(i);
+                        var label = new BMap.Label(json.title,{"offset":new BMap.Size(json.icon.lb-json.icon.x+10,-20)});
+                        marker.setLabel(label);
+                        map.addOverlay(marker);
+                        label.setStyle({
+                                    borderColor:"#808080",
+                                    color:"#333",
+                                    cursor:"pointer"
+                        });
+                        
+                        (function(){
+                            var index = i;
+                            var _iw = createInfoWindow(i);
+                            var _marker = marker;
+                            _marker.addEventListener("click",function(){
+                                this.openInfoWindow(_iw);
+                            });
+                            _iw.addEventListener("open",function(){
+                                _marker.getLabel().hide();
+                            })
+                            _iw.addEventListener("close",function(){
+                                _marker.getLabel().show();
+                            })
+                            label.addEventListener("click",function(){
+                                _marker.openInfoWindow(_iw);
+                            })
+                            if(!!json.isOpen){
+                                label.hide();
+                                _marker.openInfoWindow(_iw);
+                            }
+                        })()
+                    }
+                }
+                function createInfoWindow(i){
+                    var json = markerArr[i];
+                    var iw = new BMap.InfoWindow("<b class='iw_poi_title' title='" + json.title + "'>" + json.title + "</b><div class='iw_poi_content'>"+json.content+"</div>");
+                    return iw;
+                }
+
+                function createIcon(json){
+                    var icon = new BMap.Icon("http://app.baidu.com/map/images/us_mk_icon.png", new BMap.Size(json.w,json.h),{imageOffset: new BMap.Size(-json.l,-json.t),infoWindowOffset:new BMap.Size(json.lb+5,1),offset:new BMap.Size(json.x,json.h)})
+                    return icon;
+                }
+    
+                var lbPoints = [{point:"114.123866|38.691963",content:"我的标记"}
+                     ];
+    
+                function addRemark(){
+                    for(var i=0;i<lbPoints.length;i++)
+                    {
+                        var json = lbPoints[i];
+                        var p1 = json.point.split("|")[0];
+                        var p2 = json.point.split("|")[1];
+                        var label = new BMap.Label("<div style='padding:2px;'>"+json.content+"</div>",{point:new BMap.Point(p1,p2),offset:new BMap.Size(3,-6)});
+                        map.addOverlay(label);
+                        label.setStyle({borderColor:"#999"});
+                    }
+                }
+              addMarker();
+              addRemark();
+               var index = 0;
+    
+    
+                var myGeo = new BMap.Geocoder();
+                var adds = 
+                 [
+                 ];
+                adds.push("上海市");
+                //adds.push("西双版纳");
+                adds.push("南通市");
+                for (var i=0;i<data.length;i++)
+                {
+                adds.push(data[i].name);
+                }
+                console.log(adds);
+                function bdGEO()
+                {
+                    var add = adds[index];
+                    geocodeSearch(add);
+                    index++;
+                }
+                
+                function geocodeSearch(add)
+                {
+                    if(index < adds.length)
+                    {
+                        setTimeout(window.bdGEO,0);
+                    } 
+                    myGeo.getPoint(add, function(point)
+                    {
+                        if (point) 
+                        {
+                            document.getElementById("result").innerHTML +=  index + "、" + add + ":" + point.lng + "," + point.lat + "</br>";
+                            var address = new BMap.Point(point.lng, point.lat);
+                            //addMarker(address,new BMap.Label(index+":"+add,{offset:new BMap.Size(20,-10)}));
+                        }
+                    });
+                }
+                // 编写自定义函数,创建标注
+/*              function addMarker(point,label)
+                {
+                    var marker = new BMap.Marker(point);
+                    map.addOverlay(marker);
+                    marker.setLabel(label);
+                }
+  */              
+                bdGEO();
+
+                
+              
+              
+            });
+
+    	});
+    </script>
