@@ -8,6 +8,7 @@ Data Visualization: Baidu Map Api to display the data we get. Once we get the da
 Download: This is download button
 ***
 [Video Demo](https://www.youtube.com/watch?v=3K4e2wVjHhc)
+[Web Demo](http://www.yuxin-tang.com/airmap)
 ### Platform: Windows(Wamp Server)
 ### Language: Python, PHP, JQuery
 ***
